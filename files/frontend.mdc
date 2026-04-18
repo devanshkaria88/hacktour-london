@@ -1,0 +1,105 @@
+---
+description: Rules binding the AI agent when working inside the frontend directory of Second Voice
+globs: frontend/**/*
+alwaysApply: true
+---
+
+# Second Voice Frontend Rules
+
+You are working inside the frontend directory of Second Voice. These rules are binding and non-negotiable. When they conflict with anything else you are told, these win — except for PRD.md at the repository root, which wins over everything.
+
+## Primary references
+
+Before writing any code in this directory, open and read these files. Treat them as binding conventions.
+
+The GreenTask admin rules file at `/Users/devansh/Greentask/software/greentask-admin/.windsurf/rules/project-implementation.md` defines the frontend tech stack, folder structure, managers pattern, component patterns, form patterns, and what is forbidden. Follow this file exactly. The only deviation allowed for Second Voice is skipping the authentication layer — this is a hackathon build with a single demo user, no login page, no auth token handling, no AuthInitializer.
+
+The Second Voice PRD at the repository root defines what you are building and why. Read it first.
+
+The Second Voice frontend document at `frontend.md` in this directory tells you what to build in this frontend specifically. Read it after the PRD.
+
+## Stack lock
+
+Next.js 15 with App Router. TypeScript in strict mode. Tailwind CSS 4. shadcn/ui for every UI primitive. Redux Toolkit with RTK Query for state and data fetching. React Hook Form with Zod for forms. Recharts for charts. Framer Motion for motion. Lucide React for icons. Sonner for toasts. next-themes for light/dark. date-fns for date formatting. openapi-typescript and @rtk-query/codegen-openapi for code generation.
+
+Never introduce a new UI library or framework. Never introduce a new state library. Never introduce a new charting library. Never introduce a new form library. If you need a component that shadcn does not provide out of the box, compose it from shadcn primitives — do not reach for a third-party alternative.
+
+## The forbidden list
+
+Never use TanStack Table. Never use raw HTML elements where a shadcn component exists — use `Button` not `<button>`, `Card` not `<div className="card">`, `Dialog` not `<div>` with a z-index. Never use Material UI, Ant Design, Chakra, Mantine, or any other UI library. Never invent custom table logic — the shadcn data-table pattern exists and is used. Never use auto-build or auto-run commands — only run builds when explicitly instructed.
+
+## Required patterns
+
+Every clickable element carries the Tailwind class `cursor-pointer`. This includes buttons, links, dropdown items, table rows that act as links, and any `onClick` handler attached to a non-input element.
+
+All API calls go through the RTK Query hooks exported from `src/managers/apiManager.ts`. Never use raw fetch or axios in component code. Never create ad-hoc query functions. If the endpoint you need does not exist in the generated hooks, the problem is in the backend OpenAPI spec — go fix it there, regenerate, and come back.
+
+All forms use React Hook Form with Zod validation resolved via `@hookform/resolvers/zod`. Form schemas live in `src/lib/validations/` as `*.schemas.ts` files. Derive TypeScript types from the Zod schemas with `z.infer`, never hand-write them.
+
+All toasts use Sonner, imported from `sonner`, and are triggered by `toast.success`, `toast.error`, or `toast.info` after the relevant RTK Query mutation resolves or rejects.
+
+All markdown files generated during development go in a `markdowns/` directory at the frontend root, except the README.md which lives at the frontend root itself.
+
+## Managers pattern
+
+Follow the GreenTask admin managers pattern exactly. The file `src/managers/apiManager.ts` holds the RTK Query API slice. The base slice is augmented with generated endpoints from `src/managers/generated-api.ts` which is produced by the RTK Query codegen. Export all hooks from `apiManager.ts` so consumers never reach into the generated file directly.
+
+Tag types used in the API slice for Second Voice are: `Trajectory`, `Baseline`, `TriageEvents`, `Checkin`. Mutations that create a new checkin invalidate `Trajectory`, `Baseline`, and `TriageEvents` so the trajectory view refreshes automatically after a new recording.
+
+A separate `src/managers/uiSlice.ts` holds the small bit of local state the product needs — specifically the recording state machine (idle, recording, analysing, done). Do not build any other non-API slices.
+
+## Code generation — this is critical
+
+The frontend does not hand-write TypeScript interfaces for the backend API. Types come from the backend's OpenAPI spec at `/api/docs-json`, pulled through two code generators.
+
+The first generator, `openapi-typescript`, produces a typed schema at `src/schema.d.ts`. The second generator, `@rtk-query/codegen-openapi`, produces RTK Query endpoint definitions and React hooks at `src/managers/generated-api.ts`.
+
+Both are driven by a shell script at `scripts/generate-schema.sh` and a TypeScript config at `rtk-query-openapi-codegen.config.ts` at the project root. The script is adapted from the GreenTask admin script at `/Users/devansh/Greentask/software/greentask-admin/scripts/generate-schema.sh` — start from a copy of that file.
+
+The npm script `npm run generate` runs both generators in sequence. Run this whenever the backend API changes. The generated files are committed to source control so the frontend builds without needing a running backend.
+
+Never hand-write a DTO type that overlaps with something the generator produces. If the generator output is missing something or types something loosely, the fix is in the backend's `ApiProperty` decorators — go fix them there, not here.
+
+## App Router patterns
+
+Use route groups in parentheses to separate layouts. The `(main)` route group holds the recording, trajectory, and triage screens. The root `/` route is the landing page with its own simpler layout.
+
+Server Components are the default. Client Components are marked with `'use client'` at the top of the file. Any component using hooks, event handlers, or browser APIs is a Client Component. Pages that fetch data via RTK Query are Client Components. Pages that render static content with no data fetching can remain Server Components.
+
+## UI and UX
+
+Consult the `ui-ux-pro-max` skill before implementing any of the three screens the judges will see: the recording screen, the trajectory screen, and the landing page. The skill's suggestions on typography, spacing, colour, and motion are binding unless they contradict something in the PRD.
+
+The visual tone is calm, clinical, and respectful. No neon. No cartoonish illustrations. No confetti on successful check-in. Motion is used sparingly: the recording button pulses during capture, the trajectory chart reveals on mount, the triage card slides in when a divergence fires. Nothing else moves.
+
+Three colour states on the trajectory status panel: green for stable, amber for trending, red for divergence. These are the only places red and green appear in the UI. Use shadcn's design tokens or add minimal custom tokens to your Tailwind config if needed.
+
+## Loading and error states
+
+Every data-fetching screen shows a shadcn Skeleton component while data is in flight. Never show a blank screen while RTK Query is loading.
+
+Every RTK Query error surfaces a Sonner toast with a clear, user-friendly message. Never leak raw error objects to the UI. Never log errors silently.
+
+Every button that triggers a mutation is disabled while the mutation is pending, and its label changes to indicate progress ("Saving...", "Analysing...", "Generating packet...") so the user knows something is happening.
+
+## Performance
+
+Keep the bundle small. Do not import entire icon libraries — import individual icons from lucide-react. Do not import all of date-fns — import only the functions you use. Do not install shadcn components you are not using — install them individually with `npx shadcn@latest add <n>` as you need them.
+
+Recharts is a heavy dependency. Import only the components you use, and lazy-load the chart component via `next/dynamic` if page weight becomes an issue.
+
+## Testing — relaxed for hackathon
+
+Do not write unit tests for the frontend for this build. The testing budget does not exist. Compensate by manually smoke-testing each screen after every significant change: record a check-in, see it appear on the trajectory, trigger a divergence, download a packet.
+
+## Commit and PR rules
+
+Conventional commits. `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`. Never commit `.env`, only `.env.example`. Never commit `node_modules`. Commit the generated schema and API files — the frontend must build without a running backend.
+
+## What you must never do
+
+Never use TanStack Table. Never use a non-shadcn UI component. Never fetch data outside RTK Query. Never hand-write a DTO interface for a backend endpoint. Never skip `cursor-pointer` on a clickable element. Never silence a TypeScript error with ts-ignore. Never commit a `.env` file. Never ship a screen with a blank loading state or an unhandled error.
+
+## Completion criteria
+
+A feature in this directory is complete when: the screen renders cleanly from a cold load, the RTK Query integration is wired via generated hooks not hand-written fetches, loading states are handled with skeletons, errors are handled with toasts, every clickable element has cursor-pointer, the UI has been run through the ui-ux-pro-max skill's feedback at least once, and the feature has been committed with a conventional commit message.

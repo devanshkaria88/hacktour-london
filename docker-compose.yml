@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: second_voice_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: second_voice
+      POSTGRES_PASSWORD: second_voice
+      POSTGRES_DB: second_voice
+    ports:
+      - "5432:5432"
+    volumes:
+      - second_voice_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U second_voice -d second_voice"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  second_voice_postgres_data:
+    name: second_voice_postgres_data

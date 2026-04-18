@@ -1,0 +1,6 @@
+# Second Voice — LiveKit voice agent
+# Tested with Python 3.11. Pin minor versions to keep the hackathon build reproducible.
+livekit-agents[speechmatics,silero,turn-detector]~=1.5
+livekit-plugins-noise-cancellation~=0.2
+python-dotenv~=1.0
+httpx~=0.27

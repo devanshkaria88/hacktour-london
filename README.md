@@ -1,109 +1,333 @@
+<div align="center">
+
 # Second Voice
 
-> Voice-first longitudinal mental-health check-in for people on NHS waiting
-> lists. Records a 60-second voice sample once a day, extracts voice biomarkers
-> aligned with PHQ-9 and GAD-7, tracks each user against their own baseline,
-> and emits a one-page triage PDF when the seven-day rolling average
-> meaningfully diverges from baseline.
+**A voice-first longitudinal mental-health check-in for people on NHS waiting lists.**
 
-Built for **Voice AI Hackathon London 2026** and the **Watcha Global AI
-Hackathon Tour**.
+Talk for sixty seconds a day. We listen for what your voice says about how
+you are doing, track it against your own personal baseline, and quietly
+escalate to a clinician when your trajectory genuinely diverges.
 
-## Repository layout
+[![NestJS](https://img.shields.io/badge/backend-NestJS_11-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![Next.js](https://img.shields.io/badge/frontend-Next.js_15-000000?logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![Postgres](https://img.shields.io/badge/db-Postgres_15-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![LiveKit](https://img.shields.io/badge/realtime-LiveKit_Cloud-1FD5B9?logo=livekit&logoColor=white)](https://livekit.io/)
+[![Speechmatics](https://img.shields.io/badge/STT-Speechmatics_Medical-7E22CE)](https://www.speechmatics.com/)
+[![Thymia](https://img.shields.io/badge/biomarkers-Thymia_Sentinel-1F2937)](https://thymia.ai/)
+
+Built for **Voice AI Hackathon London 2026** and the
+**Watcha Global AI Hackathon Tour**.
+
+</div>
+
+---
+
+## Why this exists
+
+NHS talking-therapy waitlists run six to eighteen months. People deteriorate
+silently in that gap and only surface when they are already in crisis.
+Existing self-report tools (PHQ-9, GAD-7) are accurate but require effort
+and honesty on a bad day — exactly when both are scarcest.
+
+A 60-second voice sample is something most people will actually do. Inside
+that minute live a dozen acoustic and prosodic biomarkers — speech rate,
+pause distribution, pitch variability, voice quality — that correlate with
+depression and anxiety severity. We pair those with two or three
+conversational PHQ/GAD items the agent weaves into the chat, build a
+personal baseline over the first two weeks, and flag worsening before the
+person notices it themselves.
+
+> The system never tells the user a number. It tells the on-call clinician
+> there is one, with the evidence attached.
+
+---
+
+## Architecture
 
 ```
-.
-├── backend/         NestJS 11 + TypeORM 0.3 + Postgres 15. Owns the schema,
-│                    runs divergence detection, generates the triage PDF.
-├── voice-service/   Python 3.11 FastAPI sidecar. Wraps Speechmatics medical
-│                    STT and Thymia Sentinel voice biomarkers.
-├── frontend/        Next.js 15 App Router (to be scaffolded).
-└── docker-compose.yml   Postgres 15 (named volume).
+                      ┌─────────────────────────────────────┐
+                      │             Browser (Next.js)        │
+                      │  /record · /trajectory · /triage     │
+                      │  LiveKit React SDK · RTK Query       │
+                      └─────────┬──────────────┬─────────────┘
+                                │ WebRTC       │ HTTPS (cookie auth)
+                                ▼              ▼
+            ┌──────────────────────────┐   ┌──────────────────────────┐
+            │   LiveKit Cloud (SFU)    │   │   NestJS API (port 3001) │
+            │   - Room dispatch        │   │   - Auth (Argon2 + JWT)  │
+            │   - Inference: GPT-4o    │◄──┤   - Token issuer         │
+            │     mini + Cartesia TTS  │   │   - Divergence detector  │
+            └──────────┬───────────────┘   │   - Triage PDF (PDFKit)  │
+                       │ agent dispatch    │   - Questionnaire engine │
+                       ▼                   └────────────┬─────────────┘
+            ┌──────────────────────────┐                │
+            │  voice-agent (Python)    │                │
+            │  livekit-agents          │                ▼
+            │  + Speechmatics STT      │   ┌──────────────────────────┐
+            │  + Silero VAD            │   │      Postgres 15         │
+            │  + multilingual turn     │   │  users · checkins        │
+            │    detection             │   │  biomarker_readings      │
+            │                          │   │  questionnaire_responses │
+            │  Captures user audio,    │   │  triage_events           │
+            │  runs PHQ/GAD weave,     │   │  baselines               │
+            │  then on shutdown ↓      │   └──────────────────────────┘
+            └──────────┬───────────────┘                ▲
+                       │ POST /analyze (WAV)            │ POST /from-session
+                       ▼                                │ (X-Agent-Secret)
+            ┌──────────────────────────┐                │
+            │  voice-service (FastAPI) │────────────────┘
+            │  - ffmpeg → 16kHz PCM    │
+            │  - Speechmatics Batch    │
+            │    (medical domain)      │
+            │  - Thymia Sentinel WS    │
+            │    (Apollo + Helios)     │
+            └──────────────────────────┘
 ```
 
-## Run the backend stack locally
+Five processes, three deliberate boundaries:
 
-You need: Docker Desktop, Node 20+, Python 3.11+, ffmpeg (`brew install ffmpeg`).
+| Service | Stack | Responsibility |
+|---|---|---|
+| **`frontend/`** | Next.js 15 · React 19 · Tailwind 4 · shadcn/ui · Recharts · LiveKit React SDK | The whole user-facing surface. Auth pages, the live conversation room, the trajectory dashboard, triage event detail. |
+| **`backend/`** | NestJS 11 · TypeORM 0.3 · Postgres 15 · PDFKit | System of record. Owns auth, schema, divergence math, questionnaire selection/scoring, triage PDF generation, LiveKit token minting. |
+| **`voice-agent/`** | Python 3.11 · `livekit-agents` · Speechmatics STT plugin · Silero VAD | The conversation. One LiveKit worker per active room. Holds the persona, asks PHQ/GAD items, captures user audio for offline analysis, posts results to backend on shutdown. |
+| **`voice-service/`** | Python 3.11 · FastAPI · Speechmatics Batch SDK · Thymia Sentinel WS | Stateless analysis sidecar. Takes a WAV, returns `{transcript, biomarkers}`. Designed to be horizontally scalable and to fail gracefully back to a deterministic mock. |
+| **LiveKit Cloud** | Managed | WebRTC SFU + Inference (GPT-4o-mini for the LLM, Cartesia Sonic-3 for TTS). We bring our own STT and VAD. |
+
+---
+
+## How we use Speechmatics
+
+Speechmatics shows up in **two distinct places** in the pipeline. They serve
+different purposes and use different SDKs.
+
+### 1. Live STT inside the LiveKit agent (real-time)
+
+The voice agent uses the official **`livekit-plugins-speechmatics`** plugin
+to stream the user's audio frames directly from the LiveKit room into
+Speechmatics' real-time API. The partial and final transcripts are what the
+LLM sees turn-by-turn — that's how the agent can reflect on what the user
+just said and ask a meaningful follow-up.
+
+We pair it with **Silero VAD** and the multilingual turn-detection model so
+the agent knows when the user has actually finished speaking versus paused
+mid-thought, which is what makes the conversation feel non-robotic.
+
+```python
+# voice-agent/agent.py
+from livekit.plugins import speechmatics, silero
+from livekit.plugins.turn_detector.multilingual import MultilingualModel
+
+session = AgentSession(
+    stt=speechmatics.STT(),
+    vad=silero.VAD.load(),
+    turn_detection=MultilingualModel(),
+    llm="openai/gpt-4o-mini",          # via LiveKit Inference
+    tts="cartesia/sonic-3",            # via LiveKit Inference
+)
+```
+
+### 2. Batch transcription for the audit trail
+
+Separately, the agent records the entire user-side audio to a WAV and on
+session shutdown ships it to `voice-service`. The sidecar runs a second
+Speechmatics pass — this time the **Batch SDK** with the **`medical`
+domain** and the **`enhanced`** operating point — to produce a high-fidelity
+clinical-quality transcript that lives in the `checkins.transcript` column
+and gets quoted on the triage PDF.
+
+```python
+# voice-service/app/analysis.py
+config = JobConfig(
+    type=JobType.TRANSCRIPTION,
+    transcription_config=TranscriptionConfig(
+        language="en",
+        domain="medical",
+        operating_point=OperatingPoint.ENHANCED,
+    ),
+)
+async with AsyncClient(api_key=self.speechmatics_key) as client:
+    result = await client.transcribe(audio_path, config=config)
+```
+
+Why two passes? The realtime stream is optimised for low latency so the
+agent can react. The batch pass is optimised for accuracy — domain-tuned,
+medical vocabulary aware — because that transcript is what a clinician will
+read months later when triaging the alert.
+
+---
+
+## How we use Thymia
+
+Thymia's **Sentinel** SDK is a streaming voice-biomarker engine. We plug it
+into `voice-service` because biomarker extraction needs the full clean WAV,
+not the chunked frames the LiveKit agent sees, and because keeping it out of
+the agent process means biomarker latency never blocks the conversation.
+
+We enable two of Thymia's biomarker bundles:
+
+| Bundle | Dimensions we persist | Maps to |
+|---|---|---|
+| **Apollo (depression)** | anhedonia, low mood, sleep issues, low energy, appetite, worthlessness, concentration, psychomotor | PHQ-9 items 1–8 |
+| **Apollo (anxiety)** | nervousness, uncontrollable worry, excessive worry, trouble relaxing, restlessness, irritability, dread | GAD-7 items 1–7 |
+| **Helios (wellness)** | distress, stress, burnout, fatigue, low self-esteem | Broader wellness signal |
+
+That's 20 individual scores per check-in, each on a 0..1 scale, which we
+flatten into the `biomarker_readings` table. From them we derive two
+**composites** — `phq9_composite` (mean of the 8 Apollo-depression
+dimensions) and `gad7_composite` (mean of the 7 Apollo-anxiety dimensions) —
+and those composites are what the divergence detector watches.
+
+The integration uses Sentinel's **`passthrough` policy** so we get the raw
+scores rather than letting the policy reasoner make a clinical
+recommendation — that decision deliberately stays on our side, where we
+can show the math to the clinician.
+
+```python
+# voice-service/app/analysis.py
+from thymia_sentinel import SentinelClient
+
+sentinel = SentinelClient(
+    user_label="second-voice-checkin",
+    policies=["passthrough"],
+    biomarkers=["helios", "apollo"],
+    sample_rate=16_000,
+)
+await sentinel.connect()
+# stream the WAV in 32 KB chunks…
+await sentinel.send_user_transcript(transcript, is_final=True)
+# Sentinel emits a single POLICY_RESULT with all 20 dimensions populated.
+```
+
+If Thymia is unreachable or returns insufficient speech, the sidecar
+gracefully falls back to a deterministic elevated mock (~0.62 across all
+dimensions) so the demo divergence detector still fires against the seeded
+~0.36 baseline — the warning is logged so it's never silent.
+
+---
+
+## How divergence detection works
+
+For every new check-in we:
+
+1. Append the new biomarker reading to the user's full history.
+2. Compute the **personal baseline** from the first 14 check-ins (mean and
+   standard deviation per composite).
+3. Compute the **seven-day rolling average** across the most recent seven
+   check-ins.
+4. If the rolling average exceeds `baseline_mean + 2 × baseline_stddev` for
+   either PHQ-9 or GAD-7, persist a `triage_events` row whose
+   `trigger_reason` explains the threshold crossing in plain English and
+   generate a downloadable PDF packet.
+
+Drops below baseline are deliberately **not** flagged — the goal is to
+escalate worsening, not improvement.
+
+In parallel, the questionnaire engine maintains a rolling 14-day PHQ-8 and
+GAD-7 total from items the agent asked, scored against the published 0–3
+severity scale and bucketed into the standard severity bands (none /
+mild / moderate / moderately-severe / severe). Coverage below 80% of the
+instrument is reported but not bucketed, in line with the published
+clinical guidance. PHQ-9 item 9 (self-harm ideation) is excluded from the
+rotation; the agent has dedicated safety logic for that topic.
+
+---
+
+## Run it locally
+
+You'll need Docker Desktop, Node 20+, Python 3.11+, ffmpeg
+(`brew install ffmpeg`), and a LiveKit Cloud project (free tier is fine).
 
 ```bash
 # 1. Postgres
 docker compose up -d postgres
 
-# 2. Voice service (Python sidecar)
+# 2. Voice service (Speechmatics + Thymia sidecar)
 cd voice-service
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env   # add SPEECHMATICS_API_KEY / THYMIA_API_KEY (optional)
+cp .env.example .env       # SPEECHMATICS_API_KEY, THYMIA_API_KEY
 uvicorn app.main:app --port 8000
 
-# 3. Backend (in another terminal)
-cd backend
+# 3. Backend
+cd ../backend
 npm install
-cp .env.example .env
+cp .env.example .env       # DB url, JWT secret, LIVEKIT_*, VOICE_AGENT_SHARED_SECRET
 npm run migration:run
-npm run seed
 npm run start:dev
+
+# 4. Voice agent (LiveKit worker)
+cd ../voice-agent
+python3.11 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env       # LIVEKIT_*, SPEECHMATICS_API_KEY, BACKEND_URL, shared secret
+python agent.py dev        # registers with LiveKit Cloud and waits for dispatch
+
+# 5. Frontend
+cd ../frontend
+npm install
+npm run dev                # http://localhost:3000
+
+# 6. (optional) seed 21 days of plausible history for a dev account
+cd ../backend
+npm run seed:dev
 ```
 
-Then:
+Then sign up at `http://localhost:3000/signup`, hit **Record today's
+check-in**, and have a conversation. After you disconnect you'll watch the
+finalisation UI step through capture → transcribe → biomarkers → trajectory
+update in real time, and the new point will land on the chart.
 
-- API:        http://localhost:3001/api/v1
-- Swagger UI: http://localhost:3001/api/docs
-- OpenAPI:    http://localhost:3001/api/docs-json
+---
 
-## End-to-end smoke test
+## What's in each folder
 
-```bash
-# generate a 2-second audio file
-ffmpeg -f lavfi -i "sine=frequency=440:duration=2" -ac 1 -ar 16000 -y /tmp/sample.wav
-
-# baseline (should show isEstablished=true after seed)
-curl -s http://localhost:3001/api/v1/baseline | jq
-
-# trajectory (14 seeded points)
-curl -s http://localhost:3001/api/v1/trajectory | jq '.total'
-
-# submit a check-in (mock biomarkers ~0.6 fire divergence vs baseline ~0.36)
-curl -s -X POST -F "audio=@/tmp/sample.wav;type=audio/wav" \
-  -F "selfRating=5" http://localhost:3001/api/v1/checkins | jq '.divergenceDetected, .triageEvent.triggerReason'
-
-# pull the PDF
-EVT=$(curl -s http://localhost:3001/api/v1/triage-events | jq -r '.data[0].id')
-curl -s -o /tmp/triage.pdf http://localhost:3001/api/v1/triage-events/$EVT/packet
-open /tmp/triage.pdf
+```
+.
+├── backend/         NestJS 11 + TypeORM 0.3 + Postgres 15.
+│                    Auth, schema, divergence detector, questionnaire engine,
+│                    triage PDF, LiveKit token issuer.
+│
+├── voice-agent/     Python 3.11 LiveKit worker.
+│                    Persona, conversation flow, PHQ/GAD weave, audio capture,
+│                    on-shutdown finalisation.
+│
+├── voice-service/   Python 3.11 FastAPI sidecar.
+│                    Speechmatics (medical, batch) + Thymia Sentinel (Apollo,
+│                    Helios) wrapped behind a single POST /analyze.
+│
+├── frontend/        Next.js 15 App Router.
+│                    Auth, /record (LiveKit room), /trajectory (charts +
+│                    biomarker tabs + self-report), /triage/[id] (event detail
+│                    + PDF download).
+│
+├── docker-compose.yml   Postgres 15 (named volume).
+└── PRD.md, backend.md, frontend.md, context.md   Design notes.
 ```
 
-## How the divergence detector works
+Project-level conventions live under `.cursor/rules/`.
 
-For each new check-in we:
-
-1. Append the new biomarker reading to the user's full history.
-2. Compute the personal baseline from the first 14 check-ins (mean and stddev
-   for each composite).
-3. Compute the seven-day rolling average across the most recent seven
-   check-ins.
-4. If the rolling average exceeds `baseline_mean + 2 * baseline_stddev` for
-   either the PHQ-9 or GAD-7 composite, persist a `triage_events` row whose
-   `trigger_reason` explains the threshold crossing in plain English.
-
-Drops below baseline are deliberately **not** flagged — the goal is to
-escalate worsening, not improvement.
+---
 
 ## Graceful degradation
 
-The voice service is designed so the demo always produces a result:
+The system is designed to always produce a result during a demo:
 
-- No `SPEECHMATICS_API_KEY` → transcript is `null`.
-- No `THYMIA_API_KEY` → biomarkers fall back to a deterministic mock around
-  0.62 so the divergence detector reliably fires against the seeded baseline
-  of ~0.36.
+- **No `SPEECHMATICS_API_KEY`** → transcript is `null`. Biomarkers continue
+  to flow because the realtime STT stream isn't required for the batch pass.
+- **No `THYMIA_API_KEY`** → biomarkers fall back to a deterministic mock
+  around 0.62 so the divergence detector reliably fires against the seeded
+  baseline of ~0.36.
+- **`voice-service` unreachable** → backend records the check-in with null
+  biomarkers and skips divergence detection for that point.
+- **LiveKit unreachable** → the legacy `POST /api/v1/checkins` tap-to-record
+  path still works as a fallback.
 
-If the voice service itself is unreachable, the backend records the check-in
-with null biomarkers and skips divergence detection for that point.
+Every fallback is logged so it's never silent.
 
-## Project conventions
+---
 
-- Backend: see `.cursor/rules/backend-rule.mdc`.
-- Frontend: see `.cursor/rules/frontend-rules.mdc`.
-- All design decisions: see `PRD.md`, `backend.md`, `frontend.md`,
-  `context.md`.
+## License
+
+MIT (see `LICENSE` if/when added). Built in 24 hours; please don't put it in
+front of an actual patient without a clinical-safety review.

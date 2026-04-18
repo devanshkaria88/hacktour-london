@@ -1,68 +1,64 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsOptional, Max, Min } from 'class-validator';
+
+/**
+ * Each dimension is a 0..1 score (or null when the upstream provider did not
+ * emit it).
+ *
+ * IMPORTANT: every field MUST carry both an `@ApiProperty` (Swagger) AND a
+ * full set of class-validator decorators. The global `ValidationPipe` runs
+ * with `whitelist: true`, which silently strips any property without a
+ * validator decorator. Without `@IsNumber`/`@IsOptional` here, biomarkers
+ * posted by the voice-agent get dropped during validation and the persisted
+ * row ends up entirely NULL even though the request body had real values.
+ * That bug bit us once already — don't reintroduce it.
+ */
+const Dim = (): PropertyDecorator => {
+  const apiProperty = ApiProperty({
+    type: Number,
+    nullable: true,
+    minimum: 0,
+    maximum: 1,
+  });
+  const isOptional = IsOptional();
+  const isNumber = IsNumber();
+  const min = Min(0);
+  const max = Max(1);
+  return (target, propertyKey) => {
+    apiProperty(target, propertyKey);
+    isOptional(target, propertyKey);
+    isNumber(target, propertyKey);
+    min(target, propertyKey);
+    max(target, propertyKey);
+  };
+};
 
 export class BiomarkersDto {
   // --- Apollo depression dimensions ---
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  anhedonia!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  lowMood!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  sleepIssues!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  lowEnergy!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  appetite!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  worthlessness!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  concentration!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  psychomotor!: number | null;
+  @Dim() anhedonia!: number | null;
+  @Dim() lowMood!: number | null;
+  @Dim() sleepIssues!: number | null;
+  @Dim() lowEnergy!: number | null;
+  @Dim() appetite!: number | null;
+  @Dim() worthlessness!: number | null;
+  @Dim() concentration!: number | null;
+  @Dim() psychomotor!: number | null;
 
   // --- Apollo anxiety dimensions ---
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  nervousness!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  uncontrollableWorry!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  excessiveWorry!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  troubleRelaxing!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  restlessness!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  irritability!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  dread!: number | null;
+  @Dim() nervousness!: number | null;
+  @Dim() uncontrollableWorry!: number | null;
+  @Dim() excessiveWorry!: number | null;
+  @Dim() troubleRelaxing!: number | null;
+  @Dim() restlessness!: number | null;
+  @Dim() irritability!: number | null;
+  @Dim() dread!: number | null;
 
   // --- Helios wellness dimensions ---
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  distress!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  stress!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  burnout!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  fatigue!: number | null;
-
-  @ApiProperty({ type: Number, nullable: true, minimum: 0, maximum: 1 })
-  lowSelfEsteem!: number | null;
+  @Dim() distress!: number | null;
+  @Dim() stress!: number | null;
+  @Dim() burnout!: number | null;
+  @Dim() fatigue!: number | null;
+  @Dim() lowSelfEsteem!: number | null;
 }
 
 export class AnalysisResultDto {

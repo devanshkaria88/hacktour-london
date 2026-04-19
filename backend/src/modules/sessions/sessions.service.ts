@@ -18,7 +18,7 @@ export class SessionsService {
     const url = process.env.LIVEKIT_URL ?? '';
     const apiKey = process.env.LIVEKIT_API_KEY ?? '';
     const apiSecret = process.env.LIVEKIT_API_SECRET ?? '';
-    const agentName = process.env.LIVEKIT_AGENT_NAME ?? 'second-voice-checkin';
+    const agentName = process.env.LIVEKIT_AGENT_NAME ?? 'olando-checkin';
 
     if (!url || !apiKey || !apiSecret) {
       throw new InternalServerErrorException(
@@ -33,7 +33,7 @@ export class SessionsService {
       .replace('T', '_')
       .slice(0, 19);
     const suffix = randomBytes(2).toString('hex');
-    const roomName = `sv-${stamp}-${suffix}`;
+    const roomName = `ol-${stamp}-${suffix}`;
 
     // Pick the four PHQ-9/GAD-7 items the agent should weave into this
     // session. Selection prefers items the user hasn't been asked recently,

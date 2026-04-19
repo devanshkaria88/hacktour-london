@@ -1,12 +1,12 @@
-# Second Voice — Cursor Agent Bootstrap Prompt
+# Olando — Cursor Agent Bootstrap Prompt
 
 Paste the contents of this file into Cursor's agent chat as the first message. This prompt gives the agent everything it needs to start building. It references other files rather than duplicating their content, so the agent should open and read them as instructed.
 
 ---
 
-You are building Second Voice, a voice-first longitudinal mental health check-in tool for people on NHS waiting lists. The product records sixty seconds of voice once a day, analyses the audio for voice biomarkers aligned with the PHQ-9 and GAD-7 clinical scales, tracks the user against their own baseline over time, and generates a one-page PDF triage packet when biomarkers diverge meaningfully from baseline.
+You are building Olando, a voice-first longitudinal mental health check-in tool for people on NHS waiting lists. The product records sixty seconds of voice once a day, analyses the audio for voice biomarkers aligned with the PHQ-9 and GAD-7 clinical scales, tracks the user against their own baseline over time, and generates a one-page PDF triage packet when biomarkers diverge meaningfully from baseline.
 
-This build has a hard deadline. It is being demoed tonight at the Voice AI Hack London and submitted tomorrow to the Watcha Global AI Hackathon Tour at UCL. Every hour matters. Work in focused passes, ship working code, cut scope aggressively when you have to.
+This build has a hard deadline. It is being demoed at **HackTour London 2026** in the Medical track. Every hour matters. Work in focused passes, ship working code, cut scope aggressively when you have to.
 
 ## Step one — read these files before doing anything else
 
@@ -22,9 +22,9 @@ Fourth, `frontend.md` inside the `frontend/` directory. This tells you what to b
 
 Fifth, `.cursor/rules/backend.mdc` and `.cursor/rules/frontend.mdc`. These are Cursor rules that will auto-apply when you edit files in the relevant directories. Cursor loads them automatically but you should understand them up front.
 
-Sixth, the GreenTask backend rules at `/Users/devansh/Greentask/software/backend-core/.windsurf/rules/project-overview.md`, `.../implementation-rules.md`, and `.../git-rules.md`. These are the conventions for how I build backends. Second Voice follows them.
+Sixth, the GreenTask backend rules at `/Users/devansh/Greentask/software/backend-core/.windsurf/rules/project-overview.md`, `.../implementation-rules.md`, and `.../git-rules.md`. These are the conventions for how I build backends. Olando follows them.
 
-Seventh, the GreenTask admin rules at `/Users/devansh/Greentask/software/greentask-admin/.windsurf/rules/project-implementation.md`. These are the conventions for how I build Next.js frontends. Second Voice follows them.
+Seventh, the GreenTask admin rules at `/Users/devansh/Greentask/software/greentask-admin/.windsurf/rules/project-implementation.md`. These are the conventions for how I build Next.js frontends. Olando follows them.
 
 Do not start coding until you have read all of these files. Acknowledge each one as you read it so I know where you are.
 
@@ -54,7 +54,7 @@ The code generation pipeline is not optional. Never hand-write a DTO interface f
 
 A thin Python service runs alongside the NestJS backend. It wraps the thymia Sentinel SDK and the Speechmatics medical-domain SDK. It exposes one endpoint, `POST /analyze`, that takes an audio file upload and returns JSON with a `transcript` string and a `biomarkers` object matching the shape of the `biomarker_readings` table columns. Use FastAPI. Under fifty lines. Deploy to Render as a second service.
 
-The thymia hackathon repository at `https://github.com/thymia-ai/voice-ai-hack-lnd-26` contains working example code that uses both SDKs together. Copy the pattern from the `examples/02_combined_pipeline` example as the starting point. The hackathon API keys are in your local environment as `SPEECHMATICS_API_KEY` and `THYMIA_API_KEY`.
+The Thymia hackathon repository contains working example code that uses both SDKs together. Copy the pattern from the `examples/02_combined_pipeline` example as the starting point. The hackathon API keys are in your local environment as `SPEECHMATICS_API_KEY` and `THYMIA_API_KEY`.
 
 ## Step four — non-negotiable rules
 

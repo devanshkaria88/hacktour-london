@@ -1,7 +1,8 @@
 {
-  "name": "frontend",
+  "name": "olando-frontend",
   "version": "0.1.0",
   "private": true,
+  "description": "Olando — Next.js web app for the voice-first NHS mental-health check-in tool. Built for HackTour London 2026 (Medical track).",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

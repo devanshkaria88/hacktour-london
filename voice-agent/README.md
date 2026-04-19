@@ -1,4 +1,4 @@
-# Second Voice — voice agent worker
+# Olando — voice agent worker
 
 Conversational voice check-in built on [LiveKit Agents](https://docs.livekit.io/agents/), Speechmatics STT, and LiveKit Inference (LLM + TTS). Captures the user's audio in parallel and posts it to the Python `voice-service` for biomarker analysis at session end.
 
@@ -9,7 +9,7 @@ Browser (@livekit/components-react)
    ⇅ WebRTC
 LiveKit Cloud (SFU + agent dispatcher + Inference for LLM/TTS)
    ⇅
-voice-agent/  (this folder — registers as `second-voice-checkin`)
+voice-agent/  (this folder — registers as `olando-checkin`)
    ├─ Speechmatics STT for in-conversation captions
    ├─ LiveKit Inference LLM (e.g. openai/gpt-4o-mini)
    ├─ LiveKit Inference TTS (e.g. cartesia/sonic-3)
@@ -57,4 +57,4 @@ See `.env.example` for the full list. Notable variables:
 
 - The agent imposes a **240-second safety timeout** on the session — judges have short attention spans.
 - If the user mentions self-harm, the agent gives the Samaritans number (116 123) and ends the call.
-- Captured audio is also written to `/tmp/second-voice-agent/<roomName>.wav` for debugging.
+- Captured audio is also written to `/tmp/olando-agent/<roomName>.wav` for debugging.

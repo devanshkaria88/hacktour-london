@@ -27,7 +27,7 @@ export class SessionsController {
   @ApiOperation({
     summary: 'Issue a LiveKit access token for the conversational check-in',
     description:
-      'Mints a short-lived JWT for the signed-in user, generates a fresh room name, and instructs LiveKit Cloud to dispatch the second-voice-checkin agent worker into that room. The agent receives the userId via room metadata so it can post the resulting check-in back under the right account.',
+      'Mints a short-lived JWT for the signed-in user, generates a fresh room name, and instructs LiveKit Cloud to dispatch the olando-checkin agent worker into that room. The agent receives the userId via room metadata so it can post the resulting check-in back under the right account.',
   })
   @ApiCreatedResponse({ type: SessionTokenResponseDto })
   @ApiUnauthorizedResponse({ description: 'No valid session cookie.' })

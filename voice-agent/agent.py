@@ -1,4 +1,4 @@
-"""Second Voice — LiveKit voice agent worker.
+"""Olando — LiveKit voice agent worker.
 
 Runs an empathic conversational check-in:
 
@@ -49,7 +49,7 @@ logging.basicConfig(
     level=os.environ.get("LOG_LEVEL", "INFO"),
     format="%(asctime)s %(levelname)s %(name)s %(message)s",
 )
-logger = logging.getLogger("second-voice.agent")
+logger = logging.getLogger("olando.agent")
 
 
 DAILY_PROMPTS = [
@@ -112,7 +112,7 @@ def extract_user_metadata(
     return None, None, []
 
 
-SYSTEM_INSTRUCTIONS = """You are Second Voice — a calm, warm, human-feeling
+SYSTEM_INSTRUCTIONS = """You are Olando — a calm, warm, human-feeling
 voice companion for people on NHS mental-health waiting lists. You sound like
 a thoughtful friend who happens to be a great listener, not a chatbot, not a
 clinician.
@@ -390,7 +390,7 @@ class CheckInAgent(Agent):
 server = AgentServer()
 
 
-@server.rtc_session(agent_name=os.environ.get("LIVEKIT_AGENT_NAME", "second-voice-checkin"))
+@server.rtc_session(agent_name=os.environ.get("LIVEKIT_AGENT_NAME", "olando-checkin"))
 async def entrypoint(ctx: JobContext) -> None:
     daily_prompt = prompt_for_today()
     user_id, display_name, questions = extract_user_metadata(ctx)
@@ -438,7 +438,7 @@ async def entrypoint(ctx: JobContext) -> None:
 
         wav_bytes = captured.to_wav_bytes()
         debug_root = Path(
-            os.environ.get("AGENT_AUDIO_DEBUG_DIR", "/tmp/second-voice-agent")
+            os.environ.get("AGENT_AUDIO_DEBUG_DIR", "/tmp/olando-agent")
         )
         try:
             debug_root.mkdir(parents=True, exist_ok=True)

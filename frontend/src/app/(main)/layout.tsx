@@ -12,7 +12,7 @@ export default function MainLayout({
         <Topbar />
         <main className="flex-1">{children}</main>
         <footer className="border-t border-border/60 py-6 text-center text-xs text-muted-foreground">
-          Second Voice is a research prototype. It is not a clinical decision tool.
+          Olando is a research prototype. It is not a clinical decision tool.
         </footer>
       </div>
     </AuthGate>

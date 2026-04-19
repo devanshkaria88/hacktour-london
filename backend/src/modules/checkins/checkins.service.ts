@@ -42,7 +42,7 @@ interface SessionFinalisationInput {
 
 const AUDIO_ROOT = process.env.AUDIO_STORAGE_ROOT
   ? process.env.AUDIO_STORAGE_ROOT
-  : join(tmpdir(), 'second-voice-audio');
+  : join(tmpdir(), 'olando-audio');
 
 @Injectable()
 export class CheckinsService {

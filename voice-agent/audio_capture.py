@@ -18,7 +18,7 @@ from typing import List, Optional
 
 from livekit import rtc
 
-logger = logging.getLogger("second-voice.agent.capture")
+logger = logging.getLogger("olando.agent.capture")
 
 SAMPLE_RATE = 16_000
 NUM_CHANNELS = 1

@@ -69,7 +69,7 @@ export class TriageController {
       .status(200)
       .set({
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="second-voice-triage-${id}.pdf"`,
+        'Content-Disposition': `attachment; filename="olando-triage-${id}.pdf"`,
         'Content-Length': pdf.length,
       })
       .send(pdf);

@@ -252,7 +252,7 @@ export interface paths {
         put?: never;
         /**
          * Issue a LiveKit access token for the conversational check-in
-         * @description Mints a short-lived JWT for the signed-in user, generates a fresh room name, and instructs LiveKit Cloud to dispatch the second-voice-checkin agent worker into that room. The agent receives the userId via room metadata so it can post the resulting check-in back under the right account.
+         * @description Mints a short-lived JWT for the signed-in user, generates a fresh room name, and instructs LiveKit Cloud to dispatch the olando-checkin agent worker into that room. The agent receives the userId via room metadata so it can post the resulting check-in back under the right account.
          */
         post: operations["SessionsController_issueToken"];
         delete?: never;
@@ -439,7 +439,7 @@ export interface components {
             userId: string;
             /**
              * @description LiveKit room/session identifier so we can correlate logs.
-             * @example sv-demo-2026-04-18T19-22-11
+             * @example ol-demo-2026-04-18T19-22-11
              */
             sessionId?: string;
             /** @description Speechmatics transcript of the user side of the conversation. */
@@ -533,14 +533,14 @@ export interface components {
         SessionTokenResponseDto: {
             /**
              * @description LiveKit Cloud websocket URL the browser should connect to.
-             * @example wss://second-voice-xxxxx.livekit.cloud
+             * @example wss://olando-xxxxx.livekit.cloud
              */
             url: string;
             /** @description Short-lived JWT (1 hour) authorising the browser to join the room. */
             token: string;
             /**
              * @description Generated room name. The agent worker dispatches into this same room.
-             * @example sv-demo-2026-04-18T19-22-11-1d3f
+             * @example ol-demo-2026-04-18T19-22-11-1d3f
              */
             roomName: string;
             /**
@@ -555,7 +555,7 @@ export interface components {
             displayName: string;
             /**
              * @description Agent worker name that the LiveKit dispatcher will route to.
-             * @example second-voice-checkin
+             * @example olando-checkin
              */
             agentName: string;
         };

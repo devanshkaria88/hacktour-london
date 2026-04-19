@@ -22,7 +22,7 @@ import tempfile
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Optional
 
-logger = logging.getLogger("second-voice.analysis")
+logger = logging.getLogger("olando.analysis")
 
 APOLLO_DEPRESSION = (
     "anhedonia",
@@ -183,7 +183,7 @@ class AudioAnalyser:
         progress_events: List[Dict[str, Any]] = []
 
         sentinel = SentinelClient(
-            user_label="second-voice-checkin",
+            user_label="olando-checkin",
             policies=["passthrough"],
             biomarkers=["helios", "apollo"],
             sample_rate=SAMPLE_RATE,

@@ -1,4 +1,4 @@
-# Second Voice — LiveKit voice agent
+# Olando — LiveKit voice agent
 # Tested with Python 3.11. Pin minor versions to keep the hackathon build reproducible.
 livekit-agents[speechmatics,silero,turn-detector]~=1.5
 livekit-plugins-noise-cancellation~=0.2

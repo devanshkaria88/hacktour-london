@@ -68,7 +68,7 @@ export default function TriageEventPage({
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `second-voice-packet-${format(new Date(event.triggeredAt), 'yyyy-MM-dd')}.pdf`;
+      a.download = `olando-packet-${format(new Date(event.triggeredAt), 'yyyy-MM-dd')}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();

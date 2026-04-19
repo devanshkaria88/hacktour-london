@@ -20,8 +20,8 @@ export class TriagePacketService {
         size: 'A4',
         margin: 48,
         info: {
-          Title: 'Second Voice triage packet',
-          Author: 'Second Voice',
+          Title: 'Olando triage packet',
+          Author: 'Olando',
           Subject: 'Voice biomarker divergence summary',
         },
       });
@@ -47,7 +47,7 @@ export class TriagePacketService {
       .font('Helvetica-Bold')
       .fontSize(20)
       .fillColor('#0f172a')
-      .text('Second Voice triage packet', { align: 'left' });
+      .text('Olando triage packet', { align: 'left' });
     doc
       .moveDown(0.25)
       .font('Helvetica')

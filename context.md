@@ -1,12 +1,12 @@
-# Second Voice — Context Document
+# Olando — Context Document
 
-This document exists for humans. It gives you, the reader, everything you need to understand what Second Voice is, why it exists, and how it fits into the hackathons it is being built for. If you are an AI agent, read PRD.md instead — that document is written for you and is more directive.
+This document exists for humans. It gives you, the reader, everything you need to understand what Olando is, why it exists, and how it fits into the hackathon it is being built for. If you are an AI agent, read PRD.md instead — that document is written for you and is more directive.
 
 ## The short version
 
-Second Voice is a voice check-in tool for people waiting months to see an NHS mental health specialist. You record sixty seconds of voice once a day. The system transcribes what you said and analyses how you said it, extracting clinically validated voice biomarkers. It tracks you against your own baseline. When something changes meaningfully, it produces a one-page document you can hand to your GP to ask for a second look at your waiting list position.
+Olando is a voice check-in tool for people waiting months to see an NHS mental health specialist. You record sixty seconds of voice once a day. The system transcribes what you said and analyses how you said it, extracting clinically validated voice biomarkers. It tracks you against your own baseline. When something changes meaningfully, it produces a one-page document you can hand to your GP to ask for a second look at your waiting list position.
 
-We are building it for the Voice AI Hack London on Saturday, and submitting an extended version to the Watcha Global AI Hackathon on Sunday at UCL. Both events are at the same venue, which is why we can realistically run both.
+We are building it for **HackTour London 2026**, in the Medical track. The hackathon's medical sponsors — Thymia and Speechmatics — provide the SDKs that form the technical backbone of what we are building.
 
 ## The problem we are addressing
 
@@ -18,11 +18,11 @@ Meanwhile, the NHS has no continuous signal about anyone on the list. The next d
 
 ## Why voice is the right sensor
 
-Voice biomarkers are a legitimate and growing field of clinical research. Thymia — one of the sponsors of the Voice AI Hack — has a published, peer-reviewed body of work showing that voice features correlate meaningfully with depression and anxiety scores on validated clinical instruments like the PHQ-9 and the GAD-7.
+Voice biomarkers are a legitimate and growing field of clinical research. Thymia — one of the medical-track sponsors of HackTour London 2026 — has a published, peer-reviewed body of work showing that voice features correlate meaningfully with depression and anxiety scores on validated clinical instruments like the PHQ-9 and the GAD-7.
 
 This does not mean voice can diagnose. It cannot. What voice can do is give a cheap, passive, longitudinal signal — something that tracks against your own baseline over time and can detect meaningful divergence. That is exactly the signal the NHS is currently missing during the waiting period. A voice check-in costs fractions of a penny. A crisis admission costs hundreds to thousands of pounds per night. The ROI of catching one deterioration early is enormous.
 
-## How Second Voice works, in plain language
+## How Olando works, in plain language
 
 A person on the waiting list downloads the web app or bookmarks the URL. Once a day, a simple prompt appears: "How was your week so far?" or similar. They tap record, speak for up to a minute, and tap stop.
 
@@ -44,13 +44,11 @@ This is not a replacement for mental health care. It is a signal for a healthcar
 
 This is not a mood journal. We are deliberately building this differently from mood-tracking apps. The product is the trajectory and the divergence detection — the recording is just the input, and the trend is what the clinician cares about.
 
-## The two hackathons
+## The hackathon
 
-Saturday the eighteenth of April is the Voice AI Hack London, running from 10 am to 9 pm. It is a one-day sprint with two tracks: Voice and Medical, and Voice and Productivity. We are entering the Medical track. The event is sponsored by thymia and Speechmatics on the medical side, and their SDKs are the technical backbone of what we are building. Judging is scored out of a hundred, weighted across Innovation and Creativity, Technical Execution, Voice AI Integration, Impact and Practicality, and Presentation and Demo.
+We are building Olando for **HackTour London 2026**, entering the Medical track. The event's medical sponsors — Thymia and Speechmatics — provide the SDKs that form the backbone of the build (Thymia for voice biomarker extraction, Speechmatics for medical-domain transcription). Judging is scored across Innovation and Creativity, Technical Execution, Voice AI Integration, Impact and Practicality, and Presentation and Demo.
 
-Sunday the nineteenth is the Watcha Global AI Hackathon Tour, at UCL, running across both days with the submission deadline on Sunday afternoon. Watcha has three tracks: AI and Media, AI and Universality, and AI and Productivity. We are entering the Universality track with the same core product, reframed as "self-triage infrastructure for healthcare systems that cannot afford continuous assessment" — which is the universal access story. The Sunday version adds multilingual support (Speechmatics handles fifty-five languages) and an equity-focused aggregate view showing how the tool serves under-represented groups disproportionately well.
-
-The venue is the same for both hackathons, which is what makes running both tractable. The team is two people: me and Vivek. The build budget is roughly nine hours today and four hours tomorrow morning.
+The team is two people: me and Vivek. The build budget is the weekend of the hackathon — long enough to ship an end-to-end demo, not long enough to over-engineer.
 
 ## The architecture at a glance
 

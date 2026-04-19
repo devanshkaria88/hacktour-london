@@ -158,7 +158,7 @@ export function ConversationRoom({ onEnd }: ConversationRoomProps) {
                   className="mb-3 last:mb-0"
                 >
                   <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">
-                    {isAgent ? 'Second Voice' : 'You'}
+                    {isAgent ? 'Olando' : 'You'}
                   </div>
                   <p className="mt-0.5 text-sm leading-relaxed text-foreground">
                     {entry.text}

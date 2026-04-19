@@ -1,4 +1,4 @@
-# Second Voice — Frontend Instructions
+# Olando — Frontend Instructions
 
 This document lives in the `frontend/` subdirectory and is read by the AI agent building the Next.js application. Before touching any code, read PRD.md and context.md at the repository root, and read the frontend rules at `.cursor/rules/frontend.mdc`. Nothing in this document overrides the PRD. Everything in this document describes how to implement the frontend the PRD asks for.
 
@@ -38,7 +38,7 @@ Motion: use Framer Motion for the recording button's pulsing animation during ca
 
 ### Landing page (`/`)
 
-A single-column page, centred, with the product name "Second Voice" in a large heading, a one-sentence tagline explaining what it does, and a single primary button labelled "Begin daily check-in" that navigates to `/record`. Below the fold, a short three-line description of how the tool works and a link to a small "How this works" section. No login, no sign-up, no marketing copy. A judge landing here should immediately understand the product.
+A single-column page, centred, with the product name "Olando" in a large heading, a one-sentence tagline explaining what it does, and a single primary button labelled "Begin daily check-in" that navigates to `/record`. Below the fold, a short three-line description of how the tool works and a link to a small "How this works" section. No login, no sign-up, no marketing copy. A judge landing here should immediately understand the product.
 
 ### Recording screen (`/record`)
 
@@ -62,7 +62,7 @@ Reached by tapping the divergence event card on the trajectory screen. A focused
 
 ### Layout and navigation
 
-The root layout wires up Providers (Redux, theme, Sonner). The `(main)` route group layout adds a slim top header containing the Second Voice wordmark on the left and the demo user's name on the right. No sidebar. No mobile nav. No breadcrumbs. The entire experience is three screens deep and does not need heavy navigation.
+The root layout wires up Providers (Redux, theme, Sonner). The `(main)` route group layout adds a slim top header containing the Olando wordmark on the left and the demo user's name on the right. No sidebar. No mobile nav. No breadcrumbs. The entire experience is three screens deep and does not need heavy navigation.
 
 ## State management
 
@@ -76,7 +76,7 @@ Beyond the API slice, you need exactly one non-API slice: a small UI slice for t
 
 The frontend generates its TypeScript types and RTK Query endpoints directly from the backend's OpenAPI spec. This is non-negotiable. Hand-writing DTO interfaces on the frontend creates drift. Drift kills demos.
 
-Copy the `generate-schema.sh` script from the GreenTask admin at `/Users/devansh/Greentask/software/greentask-admin/scripts/generate-schema.sh` as a starting point. Adapt it for Second Voice: the script must fetch the backend's `/api/docs-json` endpoint using the URL from `NEXT_PUBLIC_API_BASE_URL` in `.env`, pass it through `openapi-typescript` to generate a TypeScript schema file, and then pass the same spec through `@rtk-query/codegen-openapi` to generate RTK Query endpoint definitions.
+Copy the `generate-schema.sh` script from the GreenTask admin at `/Users/devansh/Greentask/software/greentask-admin/scripts/generate-schema.sh` as a starting point. Adapt it for Olando: the script must fetch the backend's `/api/docs-json` endpoint using the URL from `NEXT_PUBLIC_API_BASE_URL` in `.env`, pass it through `openapi-typescript` to generate a TypeScript schema file, and then pass the same spec through `@rtk-query/codegen-openapi` to generate RTK Query endpoint definitions.
 
 The generated schema file lives at `src/schema.d.ts`. The generated RTK Query endpoints live at `src/managers/generated-api.ts`. The human-written `apiManager.ts` injects the generated endpoints into the base API slice, using RTK Query's `enhanceEndpoints` to add tag invalidation and cache behaviour.
 
@@ -88,7 +88,7 @@ If you run `npm run generate` and the output is missing endpoints or has `any` t
 
 ## Environment variables
 
-The frontend reads `NEXT_PUBLIC_API_BASE_URL` which points at the NestJS backend URL. Locally this is `http://localhost:3000`. On Vercel this is the deployed Render backend URL. Also reads `NEXT_PUBLIC_APP_NAME` which defaults to "Second Voice".
+The frontend reads `NEXT_PUBLIC_API_BASE_URL` which points at the NestJS backend URL. Locally this is `http://localhost:3000`. On Vercel this is the deployed Render backend URL. Also reads `NEXT_PUBLIC_APP_NAME` which defaults to "Olando".
 
 ## Build order — do these in exactly this order
 

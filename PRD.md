@@ -1,10 +1,10 @@
-# Second Voice — Product Requirements Document
+# Olando — Product Requirements Document
 
 This is the north star document for the AI agent building this product. Read this end to end before writing any code. Every architectural decision, every feature cut, every library choice must trace back to something in this document. If a proposed change cannot be justified against what is written here, do not build it.
 
 ## What we are building
 
-Second Voice is a voice-first longitudinal self-tracking tool for people on NHS mental health waiting lists. A person records a sixty-second voice check-in once per day, answering a simple prompt. The check-in is transcribed with a medical-grade speech model and analysed for voice biomarkers that are aligned with the PHQ-9 depression scale and the GAD-7 anxiety scale. Each reading is stored against the user's growing history and compared against their own established baseline. When the user's biomarker trajectory diverges meaningfully from that baseline, the system generates a one-page triage packet in PDF form — a clinician-facing document that a GP can review to support a request for re-prioritisation on the waiting list.
+Olando is a voice-first longitudinal self-tracking tool for people on NHS mental health waiting lists. A person records a sixty-second voice check-in once per day, answering a simple prompt. The check-in is transcribed with a medical-grade speech model and analysed for voice biomarkers that are aligned with the PHQ-9 depression scale and the GAD-7 anxiety scale. Each reading is stored against the user's growing history and compared against their own established baseline. When the user's biomarker trajectory diverges meaningfully from that baseline, the system generates a one-page triage packet in PDF form — a clinician-facing document that a GP can review to support a request for re-prioritisation on the waiting list.
 
 The product is not a diagnostic tool. It does not replace clinical judgement. It is triage infrastructure: a low-cost, passive, longitudinal signal for a healthcare system that currently has no way to detect deterioration in the months between a referral and a first appointment.
 
@@ -24,11 +24,9 @@ The reader of the triage packet is a general practitioner or a triage clinician 
 
 ## What the hackathon judges are evaluating
 
-This product is being built for the Voice AI Hack London. The judging rubric is scored out of one hundred with the following weights. Innovation and creativity is twenty-five percent. Technical execution is twenty-five percent. Voice AI integration is twenty-five percent. Impact and practicality is fifteen percent. Presentation and demo is ten percent.
+This product is being built for **HackTour London 2026**, in the Medical track. The judging rubric is scored out of one hundred with the following weights. Innovation and creativity is twenty-five percent. Technical execution is twenty-five percent. Voice AI integration is twenty-five percent. Impact and practicality is fifteen percent. Presentation and demo is ten percent.
 
-Three quarters of the score rewards cleverness, working code, and depth of voice technology integration. The judges include the CTO of the sponsor thymia, an applied machine learning lead from JP Morgan, a voice engineer from Anthropic, and an acoustics doctorate holder. The judges will see through wrappers around generic speech-to-text models. They want to see both sponsors used for their strongest features: Speechmatics for clinical-grade transcription with its medical domain model, and thymia Sentinel for voice biomarkers from the Apollo and Helios dimensions. The integration must be meaningful, not bolted on.
-
-The product will also be submitted to the Watcha Global AI Hackathon on Sunday under the AI and Universality track. The Sunday extension reframes the tool as self-triage infrastructure for healthcare systems that cannot afford continuous assessment, with emphasis on equity, since waiting lists disproportionately harm under-represented groups. The build for Voice AI Hack must leave room for this reframing on Sunday without requiring a rewrite.
+Three quarters of the score rewards cleverness, working code, and depth of voice technology integration. The judges will see through wrappers around generic speech-to-text models. They want to see both medical-track sponsors used for their strongest features: Speechmatics for clinical-grade transcription with its medical domain model, and Thymia Sentinel for voice biomarkers from the Apollo and Helios dimensions. The integration must be meaningful, not bolted on.
 
 ## The core user journey
 
@@ -44,15 +42,15 @@ If the system has detected a significant divergence event, a card appears below 
 
 A divergence event is when the user's most recent seven-day rolling average of either the PHQ-9 composite or the GAD-7 composite score has moved by more than two standard deviations away from the user's personal fourteen-day baseline, which is computed after the user has submitted at least seven check-ins. This definition matters for three reasons. First, it is anchored to the user's own baseline, not to a population norm, which is the clinically defensible approach. Second, it uses a rolling average rather than single readings, so one bad-sleep day does not trigger a false alarm. Third, it waits for enough data to establish a baseline, which keeps the product honest about when it can and cannot speak.
 
-## Feature scope for Saturday — must ship
+## Feature scope — must ship for HackTour London 2026
 
-The product must ship today by nine pm with the following capabilities working end to end. A user must be able to record a sixty-second voice check-in through the browser. The recording must be transcribed using the Speechmatics medical domain model. The recording must be analysed through thymia Sentinel to produce Apollo and Helios biomarker scores. The scores must be stored and retrieved from PostgreSQL. The user must be able to see their own trajectory on a line chart. The system must detect a divergence event and generate a one-page PDF triage packet on demand.
+The product must ship by the hackathon submission deadline with the following capabilities working end to end. A user must be able to record a sixty-second voice check-in through the browser. The recording must be transcribed using the Speechmatics medical domain model. The recording must be analysed through Thymia Sentinel to produce Apollo and Helios biomarker scores. The scores must be stored and retrieved from PostgreSQL. The user must be able to see their own trajectory on a line chart. The system must detect a divergence event and generate a one-page PDF triage packet on demand.
 
 For the demo, the database must be pre-seeded with fourteen days of synthetic prior check-ins for a demo patient, so that when the presenter adds a live check-in on stage, the divergence detection has enough history to fire. This seeding is not a shortcut — it is a legitimate representation of what a real user's account would look like after two weeks of daily use.
 
-## Feature scope for Sunday — Watcha extension
+## Stretch scope — extensions if time allows
 
-The Sunday extension adds multilingual support by exercising the Speechmatics fifty-five-language capability. It adds an aggregate view showing anonymous baseline patterns across synthetic demographic groups to make the equity argument visible. It adds a shareable trust artefact explaining in plain language how the system works, what it can and cannot claim, and how patient data is handled. None of this requires changing the core recording or analysis pipeline built on Saturday.
+If the core ships with time to spare, layer on multilingual support by exercising the Speechmatics fifty-five-language capability, an aggregate view showing anonymous baseline patterns across synthetic demographic groups to surface the equity argument, and a shareable trust artefact explaining in plain language how the system works, what it can and cannot claim, and how patient data is handled. None of this changes the core recording or analysis pipeline.
 
 ## What we are explicitly not building
 

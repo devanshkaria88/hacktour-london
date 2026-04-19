@@ -1,4 +1,4 @@
-# Second Voice — Backend Instructions
+# Olando — Backend Instructions
 
 This document lives in the `backend/` subdirectory and is read by the AI agent building the NestJS API. Before touching any code, read PRD.md and context.md at the repository root, and read the backend rules at `.cursor/rules/backend.mdc`. Nothing in this document overrides the PRD. Everything in this document describes how to implement what the PRD asks for.
 

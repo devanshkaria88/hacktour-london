@@ -25,7 +25,7 @@ import { AuthResponseDto, AuthUserDto } from './dto/auth-response.dto';
 import { JwtAuthGuard, AuthenticatedUser } from '../../common/jwt-auth.guard';
 import { CurrentUser } from '../../common/current-user.decorator';
 
-const COOKIE_NAME = process.env.SESSION_COOKIE_NAME ?? 'second_voice_session';
+const COOKIE_NAME = process.env.SESSION_COOKIE_NAME ?? 'olando_session';
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
 const cookieOpts: CookieOptions = {

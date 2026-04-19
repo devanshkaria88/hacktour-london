@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 
-logger = logging.getLogger("second-voice.agent.finalise")
+logger = logging.getLogger("olando.agent.finalise")
 
 
 class FinalisationError(RuntimeError):

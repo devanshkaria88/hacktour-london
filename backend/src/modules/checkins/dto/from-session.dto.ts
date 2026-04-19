@@ -33,7 +33,7 @@ export class FromSessionCheckinDto {
   @ApiPropertyOptional({
     type: String,
     description: 'LiveKit room/session identifier so we can correlate logs.',
-    example: 'sv-demo-2026-04-18T19-22-11',
+    example: 'ol-demo-2026-04-18T19-22-11',
   })
   @IsOptional()
   @IsString()

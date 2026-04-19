@@ -4,7 +4,7 @@ export class SessionTokenResponseDto {
   @ApiProperty({
     type: String,
     description: 'LiveKit Cloud websocket URL the browser should connect to.',
-    example: 'wss://second-voice-xxxxx.livekit.cloud',
+    example: 'wss://olando-xxxxx.livekit.cloud',
   })
   url!: string;
 
@@ -17,7 +17,7 @@ export class SessionTokenResponseDto {
   @ApiProperty({
     type: String,
     description: 'Generated room name. The agent worker dispatches into this same room.',
-    example: 'sv-demo-2026-04-18T19-22-11-1d3f',
+    example: 'ol-demo-2026-04-18T19-22-11-1d3f',
   })
   roomName!: string;
 
@@ -38,7 +38,7 @@ export class SessionTokenResponseDto {
   @ApiProperty({
     type: String,
     description: 'Agent worker name that the LiveKit dispatcher will route to.',
-    example: 'second-voice-checkin',
+    example: 'olando-checkin',
   })
   agentName!: string;
 }

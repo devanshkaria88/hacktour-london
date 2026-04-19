@@ -44,9 +44,9 @@ export default function LandingPage() {
         </span>
 
         <h1 className="font-serif text-balance text-[44px] leading-[1.05] tracking-tight text-foreground sm:text-[64px]">
-          A second voice while you wait
+          A voice that listens
           <br className="hidden sm:inline" />
-          <span className="text-primary"> to be heard.</span>
+          <span className="text-primary"> while you wait to be heard.</span>
         </h1>
 
         <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">

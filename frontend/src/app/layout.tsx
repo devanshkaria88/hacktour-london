@@ -23,7 +23,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Second Voice — Daily mental-health check-in',
+  title: 'Olando — Daily mental-health check-in',
   description:
     'A voice-first companion for people on the NHS waiting list. Sixty seconds a day, a private trajectory, and a one-page packet for your GP if anything changes.',
 };

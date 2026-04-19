@@ -1,5 +1,5 @@
 #!/bin/bash
-# Generate OpenAPI TypeScript schema for Second Voice frontend
+# Generate OpenAPI TypeScript schema for Olando frontend
 # Reads NEXT_PUBLIC_API_BASE_URL from .env and pulls the backend's OpenAPI spec
 
 set -e

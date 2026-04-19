@@ -1,4 +1,4 @@
-# Second Voice — voice analysis sidecar
+# Olando — voice analysis sidecar
 
 A small FastAPI service that the NestJS backend calls to transcribe an audio
 recording (Speechmatics medical-domain) and extract voice biomarkers (Thymia

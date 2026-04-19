@@ -38,7 +38,7 @@ export class JwtAuthGuard implements CanActivate {
   }
 
   private extractToken(req: Request): string | null {
-    const cookieName = process.env.SESSION_COOKIE_NAME ?? 'second_voice_session';
+    const cookieName = process.env.SESSION_COOKIE_NAME ?? 'olando_session';
     const cookieToken = (req as Request & { cookies?: Record<string, string> })
       .cookies?.[cookieName];
     if (cookieToken) return cookieToken;

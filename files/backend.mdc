@@ -1,26 +1,26 @@
 ---
-description: Rules binding the AI agent when working inside the backend directory of Second Voice
+description: Rules binding the AI agent when working inside the backend directory of Olando
 globs: backend/**/*
 alwaysApply: true
 ---
 
-# Second Voice Backend Rules
+# Olando Backend Rules
 
-You are working inside the backend directory of Second Voice. These rules are binding and non-negotiable. When they conflict with anything else you are told, these win — except for PRD.md at the repository root, which wins over everything.
+You are working inside the backend directory of Olando. These rules are binding and non-negotiable. When they conflict with anything else you are told, these win — except for PRD.md at the repository root, which wins over everything.
 
 ## Primary references
 
 Before writing any code in this directory, open and read these files. Treat them as binding conventions.
 
-The project-overview file at `/Users/devansh/Greentask/software/backend-core/.windsurf/rules/project-overview.md` defines the backend tech stack, folder structure, entity conventions, DTO patterns, controller patterns, service patterns, migration rules, OpenAPI conventions, and error handling patterns. Follow this file exactly. The only deviation allowed for Second Voice is skipping the authentication and multi-role guard system — this is a hackathon build with a single demo user.
+The project-overview file at `/Users/devansh/Greentask/software/backend-core/.windsurf/rules/project-overview.md` defines the backend tech stack, folder structure, entity conventions, DTO patterns, controller patterns, service patterns, migration rules, OpenAPI conventions, and error handling patterns. Follow this file exactly. The only deviation allowed for Olando is skipping the authentication and multi-role guard system — this is a hackathon build with a single demo user.
 
 The implementation-rules file at `/Users/devansh/Greentask/software/backend-core/.windsurf/rules/implementation-rules.md` defines the implementation flow, test-first approach, migration management, and pre-implementation checklist. For the hackathon, you may relax the strict test-first requirement to get to a working demo faster — but every endpoint still needs at least one basic happy-path test, and the migration rules remain absolute.
 
 The git-rules file at `/Users/devansh/Greentask/software/backend-core/.windsurf/rules/git-rules.md` defines branch naming, commit messages, and PR workflow. Follow the conventional commit format.
 
-The Second Voice PRD at the repository root defines what you are building and why. Read it first.
+The Olando PRD at the repository root defines what you are building and why. Read it first.
 
-The Second Voice backend document at `backend.md` in this directory tells you what to build in this backend specifically. Read it after the PRD.
+The Olando backend document at `backend.md` in this directory tells you what to build in this backend specifically. Read it after the PRD.
 
 ## Stack lock
 

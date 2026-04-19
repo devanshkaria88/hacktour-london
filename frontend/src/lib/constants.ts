@@ -1,4 +1,4 @@
-export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? 'Second Voice';
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? 'Olando';
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ||
   'http://localhost:3001';

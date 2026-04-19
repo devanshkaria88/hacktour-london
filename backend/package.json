@@ -1,7 +1,7 @@
 {
-  "name": "backend",
-  "version": "0.0.1",
-  "description": "",
+  "name": "olando-backend",
+  "version": "0.1.0",
+  "description": "Olando — NestJS API for the voice-first NHS mental-health check-in tool. Built for HackTour London 2026 (Medical track).",
   "author": "",
   "private": true,
   "license": "UNLICENSED",

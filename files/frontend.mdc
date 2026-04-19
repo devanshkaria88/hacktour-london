@@ -1,22 +1,22 @@
 ---
-description: Rules binding the AI agent when working inside the frontend directory of Second Voice
+description: Rules binding the AI agent when working inside the frontend directory of Olando
 globs: frontend/**/*
 alwaysApply: true
 ---
 
-# Second Voice Frontend Rules
+# Olando Frontend Rules
 
-You are working inside the frontend directory of Second Voice. These rules are binding and non-negotiable. When they conflict with anything else you are told, these win — except for PRD.md at the repository root, which wins over everything.
+You are working inside the frontend directory of Olando. These rules are binding and non-negotiable. When they conflict with anything else you are told, these win — except for PRD.md at the repository root, which wins over everything.
 
 ## Primary references
 
 Before writing any code in this directory, open and read these files. Treat them as binding conventions.
 
-The GreenTask admin rules file at `/Users/devansh/Greentask/software/greentask-admin/.windsurf/rules/project-implementation.md` defines the frontend tech stack, folder structure, managers pattern, component patterns, form patterns, and what is forbidden. Follow this file exactly. The only deviation allowed for Second Voice is skipping the authentication layer — this is a hackathon build with a single demo user, no login page, no auth token handling, no AuthInitializer.
+The GreenTask admin rules file at `/Users/devansh/Greentask/software/greentask-admin/.windsurf/rules/project-implementation.md` defines the frontend tech stack, folder structure, managers pattern, component patterns, form patterns, and what is forbidden. Follow this file exactly. The only deviation allowed for Olando is skipping the authentication layer — this is a hackathon build with a single demo user, no login page, no auth token handling, no AuthInitializer.
 
-The Second Voice PRD at the repository root defines what you are building and why. Read it first.
+The Olando PRD at the repository root defines what you are building and why. Read it first.
 
-The Second Voice frontend document at `frontend.md` in this directory tells you what to build in this frontend specifically. Read it after the PRD.
+The Olando frontend document at `frontend.md` in this directory tells you what to build in this frontend specifically. Read it after the PRD.
 
 ## Stack lock
 
@@ -44,7 +44,7 @@ All markdown files generated during development go in a `markdowns/` directory a
 
 Follow the GreenTask admin managers pattern exactly. The file `src/managers/apiManager.ts` holds the RTK Query API slice. The base slice is augmented with generated endpoints from `src/managers/generated-api.ts` which is produced by the RTK Query codegen. Export all hooks from `apiManager.ts` so consumers never reach into the generated file directly.
 
-Tag types used in the API slice for Second Voice are: `Trajectory`, `Baseline`, `TriageEvents`, `Checkin`. Mutations that create a new checkin invalidate `Trajectory`, `Baseline`, and `TriageEvents` so the trajectory view refreshes automatically after a new recording.
+Tag types used in the API slice for Olando are: `Trajectory`, `Baseline`, `TriageEvents`, `Checkin`. Mutations that create a new checkin invalidate `Trajectory`, `Baseline`, and `TriageEvents` so the trajectory view refreshes automatically after a new recording.
 
 A separate `src/managers/uiSlice.ts` holds the small bit of local state the product needs — specifically the recording state machine (idle, recording, analysing, done). Do not build any other non-API slices.
 

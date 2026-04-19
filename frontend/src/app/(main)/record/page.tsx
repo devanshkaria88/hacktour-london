@@ -270,7 +270,7 @@ export default function RecordPage() {
                 </div>
                 <div className="max-w-md text-center">
                   <p className="font-serif text-lg leading-relaxed text-foreground/90">
-                    Second Voice will greet you, listen, and reflect.
+                    Olando will greet you, listen, and reflect.
                   </p>
                   <p className="mt-2 text-sm text-muted-foreground">
                     Three minutes, no scoring. End the call whenever you&apos;re ready.

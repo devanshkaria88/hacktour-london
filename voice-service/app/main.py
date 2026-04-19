@@ -1,4 +1,4 @@
-"""Second Voice — voice analysis sidecar.
+"""Olando — voice analysis sidecar.
 
 Wraps Speechmatics batch transcription (medical domain) and Thymia Sentinel
 biomarker streaming behind a single /analyze endpoint that the NestJS backend
@@ -29,7 +29,7 @@ logging.basicConfig(
     level=os.environ.get("LOG_LEVEL", "INFO"),
     format="%(asctime)s %(levelname)s %(name)s %(message)s",
 )
-logger = logging.getLogger("second-voice.api")
+logger = logging.getLogger("olando.api")
 
 
 @asynccontextmanager
@@ -45,7 +45,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Second Voice — voice analysis service",
+    title="Olando — voice analysis service",
     description=(
         "Transcribes audio with Speechmatics medical-domain STT and extracts "
         "Thymia Sentinel voice biomarkers. Designed to sit behind the NestJS "

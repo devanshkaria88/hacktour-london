@@ -24,9 +24,9 @@ The reader of the triage packet is a general practitioner or a triage clinician 
 
 ## What the hackathon judges are evaluating
 
-This product is being built for **HackTour London 2026**, in the Medical track. The judging rubric is scored out of one hundred with the following weights. Innovation and creativity is twenty-five percent. Technical execution is twenty-five percent. Voice AI integration is twenty-five percent. Impact and practicality is fifteen percent. Presentation and demo is ten percent.
+This product is being built for **HackTour London 2026**, in the AI 4 Good track. The judging rubric is scored out of one hundred with the following weights. Innovation and creativity is twenty-five percent. Technical execution is twenty-five percent. Voice AI integration is twenty-five percent. Impact and practicality is fifteen percent. Presentation and demo is ten percent.
 
-Three quarters of the score rewards cleverness, working code, and depth of voice technology integration. The judges will see through wrappers around generic speech-to-text models. They want to see both medical-track sponsors used for their strongest features: Speechmatics for clinical-grade transcription with its medical domain model, and Thymia Sentinel for voice biomarkers from the Apollo and Helios dimensions. The integration must be meaningful, not bolted on.
+Three quarters of the score rewards cleverness, working code, and depth of voice technology integration. The judges will see through wrappers around generic speech-to-text models. They want to see both sponsor SDKs used for their strongest features: Speechmatics for clinical-grade transcription with its medical domain model, and Thymia Sentinel for voice biomarkers from the Apollo and Helios dimensions. The integration must be meaningful, not bolted on.
 
 ## The core user journey
 

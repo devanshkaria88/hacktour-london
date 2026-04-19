@@ -6,7 +6,7 @@ This document exists for humans. It gives you, the reader, everything you need t
 
 Olando is a voice check-in tool for people waiting months to see an NHS mental health specialist. You record sixty seconds of voice once a day. The system transcribes what you said and analyses how you said it, extracting clinically validated voice biomarkers. It tracks you against your own baseline. When something changes meaningfully, it produces a one-page document you can hand to your GP to ask for a second look at your waiting list position.
 
-We are building it for **HackTour London 2026**, in the Medical track. The hackathon's medical sponsors — Thymia and Speechmatics — provide the SDKs that form the technical backbone of what we are building.
+We are building it for **HackTour London 2026**, in the AI 4 Good track. The hackathon's voice-AI sponsors — Thymia and Speechmatics — provide the SDKs that form the technical backbone of what we are building.
 
 ## The problem we are addressing
 
@@ -18,7 +18,7 @@ Meanwhile, the NHS has no continuous signal about anyone on the list. The next d
 
 ## Why voice is the right sensor
 
-Voice biomarkers are a legitimate and growing field of clinical research. Thymia — one of the medical-track sponsors of HackTour London 2026 — has a published, peer-reviewed body of work showing that voice features correlate meaningfully with depression and anxiety scores on validated clinical instruments like the PHQ-9 and the GAD-7.
+Voice biomarkers are a legitimate and growing field of clinical research. Thymia — one of the voice-AI sponsors of HackTour London 2026 — has a published, peer-reviewed body of work showing that voice features correlate meaningfully with depression and anxiety scores on validated clinical instruments like the PHQ-9 and the GAD-7.
 
 This does not mean voice can diagnose. It cannot. What voice can do is give a cheap, passive, longitudinal signal — something that tracks against your own baseline over time and can detect meaningful divergence. That is exactly the signal the NHS is currently missing during the waiting period. A voice check-in costs fractions of a penny. A crisis admission costs hundreds to thousands of pounds per night. The ROI of catching one deterioration early is enormous.
 
@@ -46,7 +46,7 @@ This is not a mood journal. We are deliberately building this differently from m
 
 ## The hackathon
 
-We are building Olando for **HackTour London 2026**, entering the Medical track. The event's medical sponsors — Thymia and Speechmatics — provide the SDKs that form the backbone of the build (Thymia for voice biomarker extraction, Speechmatics for medical-domain transcription). Judging is scored across Innovation and Creativity, Technical Execution, Voice AI Integration, Impact and Practicality, and Presentation and Demo.
+We are building Olando for **HackTour London 2026**, entering the AI 4 Good track. The event's voice-AI sponsors — Thymia and Speechmatics — provide the SDKs that form the backbone of the build (Thymia for voice biomarker extraction, Speechmatics for medical-domain transcription). Judging is scored across Innovation and Creativity, Technical Execution, Voice AI Integration, Impact and Practicality, and Presentation and Demo.
 
 The team is two people: me and Vivek. The build budget is the weekend of the hackathon — long enough to ship an end-to-end demo, not long enough to over-engineer.
 

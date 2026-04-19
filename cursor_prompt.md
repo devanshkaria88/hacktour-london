@@ -6,7 +6,7 @@ Paste the contents of this file into Cursor's agent chat as the first message. T
 
 You are building Olando, a voice-first longitudinal mental health check-in tool for people on NHS waiting lists. The product records sixty seconds of voice once a day, analyses the audio for voice biomarkers aligned with the PHQ-9 and GAD-7 clinical scales, tracks the user against their own baseline over time, and generates a one-page PDF triage packet when biomarkers diverge meaningfully from baseline.
 
-This build has a hard deadline. It is being demoed at **HackTour London 2026** in the Medical track. Every hour matters. Work in focused passes, ship working code, cut scope aggressively when you have to.
+This build has a hard deadline. It is being demoed at **HackTour London 2026** in the AI 4 Good track. Every hour matters. Work in focused passes, ship working code, cut scope aggressively when you have to.
 
 ## Step one — read these files before doing anything else
 

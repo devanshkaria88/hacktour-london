@@ -15,7 +15,7 @@ escalates to a clinician when your trajectory genuinely diverges.
 [![Speechmatics](https://img.shields.io/badge/STT-Speechmatics_Medical-7E22CE)](https://www.speechmatics.com/)
 [![Thymia](https://img.shields.io/badge/biomarkers-Thymia_Sentinel-1F2937)](https://thymia.ai/)
 
-Built for **HackTour London 2026** — Medical track.
+Built for **HackTour London 2026** — AI 4 Good track.
 
 </div>
 
@@ -377,7 +377,7 @@ Every fallback is logged so it's never silent.
 
 ## Hackathon context
 
-Olando is being built for **HackTour London 2026**, in the **Medical** track.
+Olando is being built for **HackTour London 2026**, in the **AI 4 Good** track.
 The judging rubric is scored out of one hundred:
 
 | Criterion | Weight |
